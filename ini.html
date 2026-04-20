@@ -3,259 +3,333 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>RPG Initiative Pro 4.1.1</title>
+<title>RPG Initiative Pro</title>
 <style>
-:root {
---bg-color: #0f172a;
---card-bg: #1e293b;
---accent: #f43f5e;
---text: #f1f5f9;
---secondary: #6366f1;
---effect-color: #38bdf8;
---player-color: #10b981;
---active-row: rgba(99, 102, 241, 0.3);
---gap: 25px;
-}
-
-body {
-font-family: 'Inter', system-ui, sans-serif;
-background-color: var(--bg-color);
-color: var(--text);
-margin: 0;
-padding: 10px;
-display: flex;
-flex-direction: column;
-align-items: center;
-overflow-x: hidden;
-}
-
-.container { width: 100%; max-width: 500px; display: flex; flex-direction: column; }
-
-.section {
-background: var(--card-bg);
-padding: 15px;
-border-radius: 16px;
-margin-bottom: var(--gap);
-box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-}
-
-h2 { text-align: center; color: var(--accent); margin-top: 0; text-transform: uppercase; font-size: 1rem; letter-spacing: 1px; }
-
-.input-group { display: flex; gap: 8px; margin-bottom: 10px; }
-input, select { background: #0f172a; border: 1px solid #334155; color: white; padding: 12px; border-radius: 8px; font-size: 1rem; width: 100%; box-sizing: border-box; }
-
-.btn-add { background: var(--accent); border: none; color: white; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; flex-grow: 1; }
-table { width: 100%; border-collapse: collapse; }
-tr.active-turn { background-color: var(--active-row); border-left: 5px solid var(--secondary); }
-td { padding: 10px 4px; border-bottom: 1px solid #334155; }
-
-.drag-handle { cursor: grab; color: #475569; padding-right: 5px; font-size: 1.1rem; user-select: none; }
-.inline-init { width: 48px; padding: 6px 0; background: #0f172a; border: 1px solid #475569; color: white; text-align: center; border-radius: 6px; font-size: 1rem; font-weight: bold; }
-
-.is-persistent { color: var(--player-color); font-weight: bold; }
-
-.controls { display: flex; gap: 4px; justify-content: flex-end; align-items: center; }
-.btn-move { background: #334155; border: none; color: #94a3b8; padding: 7px; border-radius: 4px; font-size: 0.8rem; }
-.btn-del { background: transparent; border: 1px solid #ef4444; color: #ef4444; padding: 6px 10px; border-radius: 4px; cursor: pointer; }
-
-.round-box { background: var(--secondary); padding: 15px; border-radius: 16px; display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--gap); }
-.round-info { font-size: 1.1rem; font-weight: bold; }
-.btn-next { background: #10b981; border: none; color: white; padding: 10px 15px; border-radius: 8px; font-weight: bold; cursor: pointer; }
-.effect-tag { font-size: 0.7rem; background: rgba(56, 189, 248, 0.2); color: var(--effect-color); padding: 2px 5px; border-radius: 4px; margin-left: 4px; display: inline-block; border: 1px solid rgba(56, 189, 248, 0.2); }
+  :root {
+    --bg-color: #0f172a;
+    --card-bg: #1e293b;
+    --accent: #f43f5e;
+    --text: #f1f5f9;
+    --secondary: #6366f1;
+    --effect-color: #38bdf8;
+    --player-color: #10b981;
+    --active-row: rgba(99, 102, 241, 0.3);
+    --gap: 25px;
+  }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text);
+    margin: 0; padding: 10px;
+    display: flex; flex-direction: column; align-items: center;
+    overflow-x: hidden;
+  }
+  .container { width: 100%; max-width: 500px; display: flex; flex-direction: column; }
+  .section {
+    background: var(--card-bg); padding: 15px; border-radius: 16px;
+    margin-bottom: var(--gap); box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  }
+  h2 { text-align: center; color: var(--accent); margin-top: 0; text-transform: uppercase; font-size: 1rem; letter-spacing: 1px; }
+  .input-group { display: flex; gap: 8px; margin-bottom: 10px; }
+  input, select { background: #0f172a; border: 1px solid #334155; color: white; padding: 12px; border-radius: 8px; font-size: 1rem; }
+  .btn-add { background: var(--accent); border: none; color: white; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; flex-grow: 1; }
+  table { width: 100%; border-collapse: collapse; }
+  tr.active-turn { background-color: var(--active-row); border-left: 5px solid var(--secondary); }
+  td { padding: 10px 4px; border-bottom: 1px solid #334155; }
+  .drag-handle { cursor: grab; color: #475569; padding-right: 5px; font-size: 1.1rem; user-select: none; }
+  .inline-init { width: 48px; padding: 6px 0; background: #0f172a; border: 1px solid #475569; color: white; text-align: center; border-radius: 6px; font-size: 1rem; font-weight: bold; -moz-appearance: textfield; }
+  .inline-init::-webkit-outer-spin-button, .inline-init::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  .is-persistent { color: var(--player-color); font-weight: bold; }
+  .controls { display: flex; gap: 4px; justify-content: flex-end; align-items: center; }
+  .btn-move { background: #334155; border: none; color: #94a3b8; padding: 7px; border-radius: 4px; font-size: 0.8rem; line-height: 1; cursor: pointer; }
+  .btn-del { background: transparent; border: 1px solid #ef4444; color: #ef4444; padding: 6px 10px; border-radius: 4px; cursor: pointer; }
+  .round-box { background: var(--secondary); padding: 15px; border-radius: 16px; display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--gap); }
+  .round-info { font-size: 1.1rem; font-weight: bold; }
+  .btn-next { background: #10b981; border: none; color: white; padding: 10px 15px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+  .effect-tag { font-size: 0.7rem; background: rgba(56,189,248,0.2); color: var(--effect-color); padding: 2px 5px; border-radius: 4px; margin-left: 4px; display: inline-block; border: 1px solid rgba(56,189,248,0.2); }
+  .effect-tag.pending { opacity: 0.5; font-style: italic; }
 </style>
 </head>
 <body>
-
 <div class="container">
-<div class="section">
-<h2>⚔️ Initiative</h2>
-<div class="input-group">
-<input type="text" id="name" placeholder="Charakter" style="flex:3;">
-<input type="number" id="init" placeholder="Ini" style="flex:1;">
-</div>
-<div style="display:flex; gap:10px; align-items:center; margin-bottom: 15px;">
-<label style="font-size: 0.85rem; cursor:pointer;"><input type="checkbox" id="persistent"> 🛡️ Gruppe</label>
-<button class="btn-add" onclick="addCharacter()">HINZUFÜGEN</button>
-</div>
-<table id="draggableTable">
-<tbody id="tableBody"></tbody>
-</table>
-</div>
 
-<div class="round-box">
-<div class="round-info">RUNDE: <span id="roundDisplay">1</span></div>
-<button class="btn-next" onclick="nextTurn()">Nächster Zug ➔</button>
-</div>
+  <div class="section">
+    <h2>&#9876;&#65039; Initiative</h2>
+    <div class="input-group">
+      <input type="text" id="name" placeholder="Charakter" style="flex:3;">
+      <input type="number" id="init" placeholder="Ini" style="flex:1;">
+    </div>
+    <div style="display:flex; gap:10px; align-items:center; margin-bottom:15px;">
+      <label style="font-size:0.85rem; cursor:pointer;">
+        <input type="checkbox" id="persistent"> &#128737;&#65039; Gruppe
+      </label>
+      <button type="button" class="btn-add" id="btnAdd">HINZUF&#220;GEN</button>
+    </div>
+    <table><tbody id="tableBody"></tbody></table>
+  </div>
 
-<div class="section">
-<h2 style="color:var(--effect-color)">✨ Effekt für aktiven Charakter</h2>
-<div class="input-group">
-<input type="text" id="effName" placeholder="Effekt-Name" style="flex:3;">
-<input type="number" id="effDur" placeholder="Rnd" style="width:60px;">
-<button class="btn-add" style="background:var(--effect-color)" onclick="addEffect()">OK</button>
-</div>
-<table id="effectTable">
-<tbody id="effTableBody"></tbody>
-</table>
-</div>
+  <div class="round-box">
+    <div class="round-info">RUNDE: <span id="roundDisplay">1</span></div>
+    <button type="button" class="btn-next" id="btnNext">N&#228;chster Zug &#10132;</button>
+  </div>
 
-<div style="width:100%; display:flex; flex-direction:column; gap:10px; padding-bottom: 40px;">
-<button onclick="endCombat()" class="btn-add" style="background:#3b82f6;">Kampf beenden</button>
-<button onclick="clearAll()" style="background:transparent; border:none; color:#64748b; padding:10px; cursor:pointer; font-size: 0.8rem;">Alles zurücksetzen</button>
-</div>
-</div>
+  <div class="section">
+    <h2 style="color:var(--effect-color)">&#10024; Effekt f&#252;r aktiven Charakter</h2>
+    <select id="spellSelect" style="width:100%; margin-bottom:10px;">
+      <option value="">-- Schnellwahl Spr&#252;che --</option>
+      <option value="&#128737;&#65039; Segen" data-dur="10">&#128737;&#65039; Segen (10 Rnd)</option>
+      <option value="&#10024; Schutz vor B&#246;sem" data-dur="10">&#10024; Schutz vor B&#246;sem (10 Rnd)</option>
+      <option value="&#9889; Hast" data-dur="10">&#9889; Hast (10 Rnd)</option>
+      <option value="&#128293; Brennend" data-dur="1">&#128293; Brennend (1 Rnd)</option>
+      <option value="&#127744; Bet&#228;ubt" data-dur="1">&#127744; Bet&#228;ubt (1 Rnd)</option>
+      <option value="&#129514; Vergiftet" data-dur="1">&#129514; Vergiftet (1 Rnd)</option>
+    </select>
+    <div class="input-group">
+      <input type="text" id="effName" placeholder="Effekt-Name" style="flex:3;">
+      <input type="number" id="effDur" placeholder="Rnd" style="width:60px;">
+      <button type="button" class="btn-add" id="btnEff" style="background:var(--effect-color)">OK</button>
+    </div>
+    <table><tbody id="effTableBody"></tbody></table>
+  </div>
 
+  <div style="width:100%; display:flex; flex-direction:column; gap:10px;">
+    <button type="button" class="btn-add" id="btnEndCombat" style="background:#3b82f6;">Kampf beenden</button>
+    <button type="button" id="btnClearAll" style="background:transparent; border:none; color:#64748b; padding:10px; cursor:pointer; font-size:0.8rem;">Alles zur&#252;cksetzen</button>
+  </div>
+
+</div>
 <script>
-let characters = JSON.parse(localStorage.getItem('rpg_init')) || [];
-let effects = JSON.parse(localStorage.getItem('rpg_effects')) || [];
-let currentRound = parseInt(localStorage.getItem('rpg_round')) || 1;
-let activeIndex = parseInt(localStorage.getItem('rpg_active_idx')) || 0;
+var characters   = JSON.parse(localStorage.getItem("\u0072\u0070\u0067\u005F\u0069\u006E\u0069\u0074"))       || [];
+var effects      = JSON.parse(localStorage.getItem("\u0072\u0070\u0067\u005F\u0065\u0066\u0066\u0065\u0063\u0074\u0073"))    || [];
+var currentRound = parseInt(localStorage.getItem("\u0072\u0070\u0067\u005F\u0072\u006F\u0075\u006E\u0064"))        || 1;
+var activeIndex  = parseInt(localStorage.getItem("\u0072\u0070\u0067\u005F\u0061\u0063\u0074\u0069\u0076\u0065\u005F\u0069\u0064\u0078"))   || 0;
 
 function save() {
-localStorage.setItem('rpg_init', JSON.stringify(characters));
-localStorage.setItem('rpg_effects', JSON.stringify(effects));
-localStorage.setItem('rpg_round', currentRound);
-localStorage.setItem('rpg_active_idx', activeIndex);
+  localStorage.setItem("\u0072\u0070\u0067\u005F\u0069\u006E\u0069\u0074",       JSON.stringify(characters));
+  localStorage.setItem("\u0072\u0070\u0067\u005F\u0065\u0066\u0066\u0065\u0063\u0074\u0073",    JSON.stringify(effects));
+  localStorage.setItem("\u0072\u0070\u0067\u005F\u0072\u006F\u0075\u006E\u0064",      currentRound);
+  localStorage.setItem("\u0072\u0070\u0067\u005F\u0061\u0063\u0074\u0069\u0076\u0065\u005F\u0069\u0064\u0078", activeIndex);
+}
+
+document.getElementById("\u0073\u0070\u0065\u006C\u006C\u0053\u0065\u006C\u0065\u0063\u0074").addEventListener("\u0063\u0068\u0061\u006E\u0067\u0065", function() {
+  var opt = this.options[this.selectedIndex];
+  if (opt.value) {
+    document.getElementById("\u0065\u0066\u0066\u004E\u0061\u006D\u0065").value = opt.value;
+    document.getElementById("\u0065\u0066\u0066\u0044\u0075\u0072").value  = opt.getAttribute("\u0064\u0061\u0074\u0061\u002D\u0064\u0075\u0072");
+  }
+});
+
+document.getElementById("\u0062\u0074\u006E\u0041\u0064\u0064").addEventListener("\u0063\u006C\u0069\u0063\u006B",       function() { addCharacter(); });
+document.getElementById("\u0062\u0074\u006E\u004E\u0065\u0078\u0074").addEventListener("\u0063\u006C\u0069\u0063\u006B",      function() { nextTurn(); });
+document.getElementById("\u0062\u0074\u006E\u0045\u0066\u0066").addEventListener("\u0063\u006C\u0069\u0063\u006B",       function() { addEffect(); });
+document.getElementById("\u0062\u0074\u006E\u0045\u006E\u0064\u0043\u006F\u006D\u0062\u0061\u0074").addEventListener("\u0063\u006C\u0069\u0063\u006B", function() { endCombat(); });
+document.getElementById("\u0062\u0074\u006E\u0043\u006C\u0065\u0061\u0072\u0041\u006C\u006C").addEventListener("\u0063\u006C\u0069\u0063\u006B",  function() { clearAll(); });
+
+function makeCharRow(c, i) {
+  var row = document.createElement("\u0074\u0072");
+  row.draggable = true;
+  row.dataset.index = i;
+  if (i === activeIndex) { row.className = "\u0061\u0063\u0074\u0069\u0076\u0065\u002D\u0074\u0075\u0072\u006E"; }
+
+  var tdH = document.createElement("\u0074\u0064");
+  tdH.className = "\u0064\u0072\u0061\u0067\u002D\u0068\u0061\u006E\u0064\u006C\u0065";
+  tdH.textContent = "\u2630";
+  row.appendChild(tdH);
+
+  var tdI = document.createElement("\u0074\u0064");
+  var inp = document.createElement("\u0069\u006E\u0070\u0075\u0074");
+  inp.type = "\u006E\u0075\u006D\u0062\u0065\u0072";
+  inp.className = "\u0069\u006E\u006C\u0069\u006E\u0065\u002D\u0069\u006E\u0069\u0074";
+  inp.value = c.init;
+  inp.addEventListener("\u0066\u006F\u0063\u0075\u0073", function() { this.select(); });
+  (function(idx) {
+    inp.addEventListener("\u0063\u0068\u0061\u006E\u0067\u0065", function() { updateIni(idx, this.value); });
+  })(i);
+  tdI.appendChild(inp);
+  row.appendChild(tdI);
+
+  var tdN = document.createElement("\u0074\u0064");
+  tdN.style.width = "\u0031\u0030\u0030\u0025";
+  tdN.style.paddingLeft = "\u0035\u0070\u0078";
+  if (c.persistent) { tdN.className = "\u0069\u0073\u002D\u0070\u0065\u0072\u0073\u0069\u0073\u0074\u0065\u006E\u0074"; }
+  tdN.textContent = (c.persistent ? "\uD83D\uDEE1\uFE0F\u0020" : "") + c.name;
+  var charFx = effects.filter(function(e) { return e.ownerId === c.id; });
+  charFx.forEach(function(e) {
+    var tag = document.createElement("\u0073\u0070\u0061\u006E");
+    tag.className = e.skipFirstTick ? "\u0065\u0066\u0066\u0065\u0063\u0074\u002D\u0074\u0061\u0067\u0020\u0070\u0065\u006E\u0064\u0069\u006E\u0067" : "\u0065\u0066\u0066\u0065\u0063\u0074\u002D\u0074\u0061\u0067";
+    tag.textContent = e.name + "\u0020\u0028" + e.duration + "\u0029" + (e.skipFirstTick ? "\u0020\u231B" : "");
+    tdN.appendChild(tag);
+  });
+  row.appendChild(tdN);
+
+  var tdC = document.createElement("\u0074\u0064");
+  tdC.className = "\u0063\u006F\u006E\u0074\u0072\u006F\u006C\u0073";
+
+  var bUp = document.createElement("\u0062\u0075\u0074\u0074\u006F\u006E");
+  bUp.type = "\u0062\u0075\u0074\u0074\u006F\u006E"; bUp.className = "\u0062\u0074\u006E\u002D\u006D\u006F\u0076\u0065"; bUp.textContent = "\u25B2";
+  (function(idx) { bUp.addEventListener("\u0063\u006C\u0069\u0063\u006B", function() { moveManual(idx, -1); }); })(i);
+  tdC.appendChild(bUp);
+
+  var bDn = document.createElement("\u0062\u0075\u0074\u0074\u006F\u006E");
+  bDn.type = "\u0062\u0075\u0074\u0074\u006F\u006E"; bDn.className = "\u0062\u0074\u006E\u002D\u006D\u006F\u0076\u0065"; bDn.textContent = "\u25BC";
+  (function(idx) { bDn.addEventListener("\u0063\u006C\u0069\u0063\u006B", function() { moveManual(idx, 1); }); })(i);
+  tdC.appendChild(bDn);
+
+  if (!c.persistent) {
+    var bDel = document.createElement("\u0062\u0075\u0074\u0074\u006F\u006E");
+    bDel.type = "\u0062\u0075\u0074\u0074\u006F\u006E"; bDel.className = "\u0062\u0074\u006E\u002D\u0064\u0065\u006C"; bDel.textContent = "\u2715";
+    (function(idx) { bDel.addEventListener("\u0063\u006C\u0069\u0063\u006B", function() { removeChar(idx); }); })(i);
+    tdC.appendChild(bDel);
+  }
+  row.appendChild(tdC);
+
+  row.addEventListener("\u0064\u0072\u0061\u0067\u0073\u0074\u0061\u0072\u0074", handleDragStart);
+  row.addEventListener("\u0064\u0072\u0061\u0067\u006F\u0076\u0065\u0072",  handleDragOver);
+  row.addEventListener("\u0064\u0072\u006F\u0070",      handleDrop);
+  return row;
+}
+
+function makeEffRow(e, j, ownerName) {
+  var row = document.createElement("\u0074\u0072");
+
+  var tdD = document.createElement("\u0074\u0064");
+  tdD.style.width = "\u0033\u0030\u0070\u0078";
+  tdD.style.color = "\u0076\u0061\u0072\u0028\u002D\u002D\u0065\u0066\u0066\u0065\u0063\u0074\u002D\u0063\u006F\u006C\u006F\u0072\u0029";
+  tdD.style.fontWeight = "\u0062\u006F\u006C\u0064";
+  tdD.textContent = e.duration + (e.skipFirstTick ? "\u231B" : "");
+  row.appendChild(tdD);
+
+  var tdN = document.createElement("\u0074\u0064");
+  tdN.textContent = e.name + "\u0020";
+  var sm = document.createElement("\u0073\u006D\u0061\u006C\u006C");
+  sm.style.opacity = "\u0030\u002E\u0036";
+  sm.textContent = "\u0028" + ownerName + "\u0029";
+  tdN.appendChild(sm);
+  row.appendChild(tdN);
+
+  var tdC = document.createElement("\u0074\u0064");
+  tdC.className = "\u0063\u006F\u006E\u0074\u0072\u006F\u006C\u0073";
+  var bDel = document.createElement("\u0062\u0075\u0074\u0074\u006F\u006E");
+  bDel.type = "\u0062\u0075\u0074\u0074\u006F\u006E"; bDel.className = "\u0062\u0074\u006E\u002D\u0064\u0065\u006C"; bDel.textContent = "\u2715";
+  (function(idx) { bDel.addEventListener("\u0063\u006C\u0069\u0063\u006B", function() { removeEff(idx); }); })(j);
+  tdC.appendChild(bDel);
+  row.appendChild(tdC);
+  return row;
 }
 
 function updateTables() {
-save();
-document.getElementById('roundDisplay').innerText = currentRound;
-const tChar = document.getElementById('tableBody');
-tChar.innerHTML = '';
+  save();
+  document.getElementById("\u0072\u006F\u0075\u006E\u0064\u0044\u0069\u0073\u0070\u006C\u0061\u0079").textContent = currentRound;
 
-characters.forEach((c, i) => {
-const row = document.createElement('tr');
-row.draggable = true;
-row.dataset.index = i;
-if(i === activeIndex) row.className = 'active-turn';
+  var tC = document.getElementById("\u0074\u0061\u0062\u006C\u0065\u0042\u006F\u0064\u0079");
+  tC.innerHTML = "";
+  for (var i = 0; i < characters.length; i++) {
+    tC.appendChild(makeCharRow(characters[i], i));
+  }
 
-const charEffects = effects.filter(e => e.ownerId === c.id);
-const effectHtml = charEffects.map(e => `<span class="effect-tag">${e.name} (${e.duration})</span>`).join('');
-
-row.innerHTML = `
-<td class="drag-handle">☰</td>
-<td><input type="number" class="inline-init" value="${c.init}" onchange="updateIni(${i}, this.value)"></td>
-<td class="${c.persistent ? 'is-persistent' : ''}" style="width:100%; padding-left: 5px;">
-${c.persistent ? '🛡️ ' : ''}${c.name} ${effectHtml}
-</td>
-<td class="controls">
-<button class="btn-move" onclick="moveManual(${i},-1)">▲</button>
-<button class="btn-move" onclick="moveManual(${i},1)">▼</button>
-${!c.persistent ? `<button class="btn-del" onclick="removeChar(${i})">✕</button>` : ''}
-</td>`;
-row.addEventListener('dragstart', handleDragStart);
-row.addEventListener('dragover', handleDragOver);
-row.addEventListener('drop', handleDrop);
-tChar.appendChild(row);
-});
-
-const tEff = document.getElementById('effTableBody');
-tEff.innerHTML = '';
-effects.forEach((e, i) => {
-const owner = characters.find(c => c.id === e.ownerId);
-tEff.innerHTML += `<tr>
-<td style="width:30px; color:var(--effect-color); font-weight:bold;">${e.duration}</td>
-<td>${e.name} <small style="opacity:0.6;">(${owner ? owner.name : '?'})</small></td>
-<td class="controls"><button class="btn-del" onclick="removeEff(${i})">✕</button></td>
-</tr>`;
-});
+  var tE = document.getElementById("\u0065\u0066\u0066\u0054\u0061\u0062\u006C\u0065\u0042\u006F\u0064\u0079");
+  tE.innerHTML = "";
+  for (var j = 0; j < effects.length; j++) {
+    var owner = null;
+    for (var k = 0; k < characters.length; k++) {
+      if (characters[k].id === effects[j].ownerId) { owner = characters[k]; break; }
+    }
+    tE.appendChild(makeEffRow(effects[j], j, owner ? owner.name : "\u003F"));
+  }
 }
 
-// Drag & Drop
-let dragSrcEl = null;
-function handleDragStart(e) { dragSrcEl = this; e.dataTransfer.effectAllowed = 'move'; }
-function handleDragOver(e) { if (e.preventDefault) e.preventDefault(); return false; }
+var dragSrcEl = null;
+function handleDragStart(e) { dragSrcEl = this; e.dataTransfer.effectAllowed = "\u006D\u006F\u0076\u0065"; }
+function handleDragOver(e)  { if (e.preventDefault) { e.preventDefault(); } return false; }
 function handleDrop(e) {
-if (e.stopPropagation) e.stopPropagation();
-const fromIdx = parseInt(dragSrcEl.dataset.index);
-const toIdx = parseInt(this.dataset.index);
-if (fromIdx !== toIdx) {
-const item = characters.splice(fromIdx, 1)[0];
-characters.splice(toIdx, 0, item);
-updateTables();
-}
-return false;
-}
-
-function addCharacter() {
-const n = document.getElementById('name'), i = document.getElementById('init'), p = document.getElementById('persistent');
-if(n.value && i.value) {
-characters.push({
-id: "id_" + Date.now() + Math.random(),
-name: n.value,
-init: parseInt(i.value),
-persistent: p.checked
-});
-characters.sort((a, b) => b.init - a.init);
-n.value = ''; i.value = '';
-updateTables();
-}
+  if (e.stopPropagation) { e.stopPropagation(); }
+  var from = parseInt(dragSrcEl.dataset.index);
+  var to   = parseInt(this.dataset.index);
+  if (from !== to) {
+    var item = characters.splice(from, 1)[0];
+    characters.splice(to, 0, item);
+    updateTables();
+  }
+  return false;
 }
 
 function nextTurn() {
-if(characters.length === 0) return;
-
-// 1. Index weiterschalten
-activeIndex++;
-if (activeIndex >= characters.length) {
-activeIndex = 0;
-currentRound++;
+  if (characters.length === 0) { return; }
+  activeIndex++;
+  if (activeIndex >= characters.length) { activeIndex = 0; currentRound++; }
+  var cid = characters[activeIndex].id;
+  effects = effects.map(function(e) {
+    if (e.ownerId === cid) {
+      return { name: e.name, duration: e.duration - 1, ownerId: e.ownerId };
+    }
+    return e;
+  }).filter(function(e) { return e.duration > 0; });
+  updateTables();
 }
 
-// 2. Effekt-Update: Erst wenn der Charakter JETZT dran ist, sinkt die Dauer
-const activeCharId = characters[activeIndex].id;
-effects = effects.map(e => {
-if(e.ownerId === activeCharId) return { ...e, duration: e.duration - 1 };
-return e;
-}).filter(e => e.duration > 0);
-
-updateTables();
+function addCharacter() {
+  var n  = document.getElementById("\u006E\u0061\u006D\u0065");
+  var iv = document.getElementById("\u0069\u006E\u0069\u0074");
+  var p  = document.getElementById("\u0070\u0065\u0072\u0073\u0069\u0073\u0074\u0065\u006E\u0074");
+  if (n.value && iv.value) {
+    characters.push({
+      id: Date.now() + Math.random(),
+      name: n.value,
+      init: parseInt(iv.value),
+      persistent: p.checked
+    });
+    characters.sort(function(a, b) { return b.init - a.init; });
+    n.value = ""; iv.value = ""; p.checked = false;
+    updateTables();
+  }
 }
 
 function addEffect() {
-const n = document.getElementById('effName'), d = document.getElementById('effDur');
-if(n.value && d.value && characters[activeIndex]) {
-effects.push({
-name: n.value,
-duration: parseInt(d.value),
-ownerId: characters[activeIndex].id
-});
-n.value = ''; d.value = '';
-updateTables();
-}
+  var n = document.getElementById("\u0065\u0066\u0066\u004E\u0061\u006D\u0065");
+  var d = document.getElementById("\u0065\u0066\u0066\u0044\u0075\u0072");
+  if (n.value && d.value && characters[activeIndex]) {
+    effects.push({
+      name: n.value,
+      duration: parseInt(d.value),
+      ownerId: characters[activeIndex].id
+    });
+    n.value = ""; d.value = "";
+    document.getElementById("\u0073\u0070\u0065\u006C\u006C\u0053\u0065\u006C\u0065\u0063\u0074").value = "";
+    updateTables();
+  }
 }
 
 function updateIni(index, val) {
-characters[index].init = parseInt(val) || 0;
-characters.sort((a, b) => b.init - a.init);
-updateTables();
+  characters[index].init = parseInt(val) || 0;
+  characters.sort(function(a, b) { return b.init - a.init; });
+  updateTables();
 }
 
 function moveManual(index, dir) {
-const newIdx = Math.max(0, Math.min(characters.length - 1, index + dir));
-const item = characters.splice(index, 1)[0];
-characters.splice(newIdx, 0, item);
-updateTables();
+  var ni = Math.max(0, Math.min(characters.length - 1, index + dir));
+  var item = characters.splice(index, 1)[0];
+  characters.splice(ni, 0, item);
+  updateTables();
 }
 
 function removeChar(i) { characters.splice(i, 1); updateTables(); }
-function removeEff(i) { effects.splice(i, 1); updateTables(); }
+function removeEff(i)  { effects.splice(i, 1); updateTables(); }
+
 function endCombat() {
-if(confirm("Kampf beenden?")) {
-characters = characters.filter(c => c.persistent).map(c => ({...c, init: 0}));
-effects = [];
-currentRound = 1;
-activeIndex = 0;
-updateTables();
-}
+  if (confirm("\u004B\u0061\u006D\u0070\u0066\u0020\u0062\u0065\u0065\u006E\u0064\u0065\u006E\u003F")) {
+    characters = characters.filter(function(c) { return c.persistent; }).map(function(c) {
+      return { id: c.id, name: c.name, init: 0, persistent: true };
+    });
+    effects = []; currentRound = 1; activeIndex = 0;
+    updateTables();
+  }
 }
 
 function clearAll() {
-if(confirm("Wirklich alles löschen? (Auch die Gruppe)")) {
-localStorage.clear();
-location.reload();
-}
+  if (confirm("\u0041\u006C\u006C\u0065\u0073\u0020\u006C\u00F6\u0073\u0063\u0068\u0065\u006E\u003F")) {
+    localStorage.clear();
+    location.reload();
+  }
 }
 
 updateTables();
