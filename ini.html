@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>RPG Initiative Pro 4.0</title>
+<title>RPG Initiative Pro 4.0.1</title>
 <style>
 :root {
 --bg-color: #0f172a;
@@ -27,6 +27,7 @@ padding: 10px;
 display: flex;
 flex-direction: column;
 align-items: center;
+overflow-x: hidden;
 }
 
 .container { width: 100%; max-width: 500px; }
@@ -42,17 +43,19 @@ box-shadow: 0 4px 15px rgba(0,0,0,0.3);
 h2 { text-align: center; color: var(--accent); margin-top: 0; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px; }
 
 .input-group { display: flex; gap: 8px; margin-bottom: 10px; }
-input, select { background: #0f172a; border: 1px solid #334155; color: white; padding: 12px; border-radius: 8px; font-size: 1rem; }
+input, select { background: #0f172a; border: 1px solid #334155; color: white; padding: 12px; border-radius: 8px; font-size: 1rem; width: 100%; box-sizing: border-box; }
 
 .btn-add { background: var(--accent); border: none; color: white; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; flex-grow: 1; }
 table { width: 100%; border-collapse: collapse; }
-tr { transition: all 0.2s; }
+tr { transition: background 0.2s; cursor: default; }
+tr.dragging { opacity: 0.4; background: #334155; }
 tr.active-turn { background-color: var(--active-row); border-left: 5px solid var(--secondary); }
 tr.is-ready { border-left: 5px solid var(--ready-color) !important; }
 tr.is-waiting { opacity: 0.5; }
-td { padding: 10px 4px; border-bottom: 1px solid #334155; }
+td { padding: 10px 4px; border-bottom: 1px solid #334155; vertical-align: middle; }
 
-.inline-init { width: 45px; padding: 6px 0; background: #0f172a; border: 1px solid #475569; color: white; text-align: center; border-radius: 6px; font-weight: bold; }
+.drag-handle { cursor: grab; color: #475569; font-size: 1.2rem; padding-right: 10px; user-select: none; }
+.inline-init { width: 45px !important; padding: 6px 0 !important; text-align: center; font-weight: bold; }
 
 .controls { display: flex; gap: 4px; justify-content: flex-end; }
 .btn-tactic { background: #334155; border: none; color: white; padding: 6px 8px; border-radius: 4px; font-size: 0.7rem; cursor: pointer; }
@@ -60,8 +63,6 @@ td { padding: 10px 4px; border-bottom: 1px solid #334155; }
 
 .round-box { background: var(--secondary); padding: 15px; border-radius: 16px; display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--gap); }
 .btn-next { background: #10b981; border: none; color: white; padding: 12px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 0 #059669; }
-.btn-next:active { transform: translateY(2px); box-shadow: none; }
-
 .effect-tag { font-size: 0.7rem; background: rgba(56, 189, 248, 0.15); color: var(--effect-color); padding: 2px 6px; border-radius: 4px; margin: 2px; display: inline-block; border: 1px solid var(--effect-color); }
 .is-persistent { color: var(--player-color); font-weight: bold; }
 </style>
@@ -70,42 +71,40 @@ td { padding: 10px 4px; border-bottom: 1px solid #334155; }
 
 <div class="container">
 <div class="section">
-<h2>⚔️ Charakter hinzufügen</h2>
+<h2>⚔️ Initiative</h2>
 <div class="input-group">
-<input type="text" id="name" placeholder="Name" style="flex:3;">
+<input type="text" id="name" placeholder="Charakter" style="flex:3;">
 <input type="number" id="init" placeholder="Ini" style="flex:1;">
 </div>
 <div style="display:flex; gap:10px; align-items:center;">
-<label style="font-size: 0.85rem; cursor:pointer;"><input type="checkbox" id="persistent"> 🛡️ Gruppe</label>
+<label style="cursor:pointer; font-size: 0.85rem;"><input type="checkbox" id="persistent"> 🛡️ Gruppe</label>
 <button class="btn-add" onclick="addCharacter()">HINZUFÜGEN</button>
 </div>
 </div>
 
-<div class="section">
-<table id="mainTable">
+<div class="section" style="padding: 5px;">
+<table>
 <tbody id="tableBody"></tbody>
 </table>
 </div>
 
 <div class="round-box">
-<div style="font-weight: bold;">RUNDE: <span id="roundDisplay" style="font-size: 1.5rem;">1</span></div>
+<div>RUNDE: <span id="roundDisplay" style="font-size: 1.4rem; font-weight: bold;">1</span></div>
 <button class="btn-next" onclick="nextTurn()">Nächster Zug ➔</button>
 </div>
 
 <div class="section">
-<h2 style="color:var(--effect-color)">✨ Effekt (aktiver Charakter)</h2>
-<select id="spellSelect" onchange="useSpell()" style="width:100%; margin-bottom:10px;">
+<h2 style="color:var(--effect-color)">✨ Effekt</h2>
+<select id="spellSelect" onchange="useSpell()" style="margin-bottom:10px;">
 <option value="">-- Schnellwahl --</option>
 <option value="🛡️ Segen">Segen (10 Rnd)</option>
-<option value="✨ Schutz">Schutz (10 Rnd)</option>
 <option value="⚡ Hast">Hast (10 Rnd)</option>
 <option value="🔥 Brennend">Brennend (1 Rnd)</option>
 <option value="🌀 Betäubt">Betäubt (1 Rnd)</option>
-<option value="🧪 Vergiftet">Vergiftet (1 Rnd)</option>
 </select>
 <div class="input-group">
-<input type="text" id="effName" placeholder="Name" style="flex:3;">
-<input type="number" id="effDur" placeholder="Rnd" style="width:60px;">
+<input type="text" id="effName" placeholder="Effekt Name" style="flex:3;">
+<input type="number" id="effDur" placeholder="Rnd" style="width:70px;">
 <button class="btn-add" style="background:var(--effect-color)" onclick="addEffect()">OK</button>
 </div>
 <table id="effectTable">
@@ -113,26 +112,25 @@ td { padding: 10px 4px; border-bottom: 1px solid #334155; }
 </table>
 </div>
 
-<div style="display:flex; flex-direction:column; gap:10px;">
+<div style="display:flex; flex-direction:column; gap:10px; margin-bottom: 30px;">
 <button onclick="endCombat()" class="btn-add" style="background:#3b82f6;">Kampf beenden</button>
-<button onclick="clearAll()" style="background:transparent; border:none; color:#64748b; padding:10px; cursor:pointer; font-size: 0.8rem;">Daten löschen</button>
+<button onclick="clearAll()" style="background:transparent; border:none; color:#64748b; font-size: 0.8rem; cursor:pointer;">Alles löschen</button>
 </div>
 </div>
 
 <script>
-let characters = JSON.parse(localStorage.getItem('rpg_v4_init')) || [];
-let effects = JSON.parse(localStorage.getItem('rpg_v4_effects')) || [];
-let currentRound = parseInt(localStorage.getItem('rpg_v4_round')) || 1;
-let activeIndex = parseInt(localStorage.getItem('rpg_v4_active_idx')) || 0;
+let characters = JSON.parse(localStorage.getItem('rpg_v401_init')) || [];
+let effects = JSON.parse(localStorage.getItem('rpg_v401_effects')) || [];
+let currentRound = parseInt(localStorage.getItem('rpg_v401_round')) || 1;
+let activeIndex = parseInt(localStorage.getItem('rpg_v401_active_idx')) || 0;
 
-// Enter-Taste Support
 document.getElementById('init').addEventListener('keypress', (e) => { if(e.key === 'Enter') addCharacter(); });
 
 function save() {
-localStorage.setItem('rpg_v4_init', JSON.stringify(characters));
-localStorage.setItem('rpg_v4_effects', JSON.stringify(effects));
-localStorage.setItem('rpg_v4_round', currentRound);
-localStorage.setItem('rpg_v4_active_idx', activeIndex);
+localStorage.setItem('rpg_v401_init', JSON.stringify(characters));
+localStorage.setItem('rpg_v401_effects', JSON.stringify(effects));
+localStorage.setItem('rpg_v401_round', currentRound);
+localStorage.setItem('rpg_v401_active_idx', activeIndex);
 }
 
 function addCharacter() {
@@ -143,76 +141,62 @@ id: Date.now() + Math.random(),
 name: n.value,
 init: parseInt(i.value),
 persistent: p.checked,
-isReady: false,
-isWaiting: false
+isReady: false, isWaiting: false
 });
 characters.sort((a, b) => b.init - a.init);
-n.value = ''; i.value = ''; p.checked = false; n.focus();
+n.value = ''; i.value = ''; n.focus();
 updateTables();
 }
 }
 
 function nextTurn() {
 if(characters.length === 0) return;
-
 activeIndex++;
-if (activeIndex >= characters.length) {
-activeIndex = 0;
-currentRound++;
-}
+if (activeIndex >= characters.length) { activeIndex = 0; currentRound++; }
 
-// Effekte verringern sich erst, wenn der betroffene Charakter NEU am Zug ist
-const activeCharId = characters[activeIndex].id;
+const nextId = characters[activeIndex].id;
 effects = effects.map(e => {
-if(e.ownerId === activeCharId) return { ...e, duration: e.duration - 1 };
+if(e.ownerId === nextId) return { ...e, duration: e.duration - 1 };
 return e;
 }).filter(e => e.duration > 0);
 
-// Status-Reset bei Zugbeginn
 characters[activeIndex].isReady = false;
 characters[activeIndex].isWaiting = false;
-
-updateTables();
-// Auto-Scroll zum aktiven Element
-setTimeout(() => {
-const activeRow = document.querySelector('.active-turn');
-if(activeRow) activeRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
-}, 50);
-}
-
-function delayTurn(i) {
-const char = characters.splice(i, 1)[0];
-char.isWaiting = true;
-characters.push(char); // Ans Ende der Runde setzen
-if(activeIndex >= characters.length) activeIndex = 0;
 updateTables();
 }
 
-function toggleReady(i) {
-characters[i].isReady = !characters[i].isReady;
-updateTables();
+// --- Drag & Drop Logik ---
+let dragSrcIdx = null;
+
+function handleDragStart(e) {
+dragSrcIdx = parseInt(this.dataset.index);
+this.classList.add('dragging');
+e.dataTransfer.effectAllowed = 'move';
 }
 
-function addEffect() {
-const n = document.getElementById('effName'), d = document.getElementById('effDur');
-if(n.value && d.value && characters[activeIndex]) {
-effects.push({
-name: n.value,
-duration: parseInt(d.value),
-ownerId: characters[activeIndex].id
-});
-n.value = ''; d.value = '';
-updateTables();
-}
+function handleDragOver(e) {
+if (e.preventDefault) e.preventDefault();
+return false;
 }
 
-function useSpell() {
-const s = document.getElementById('spellSelect'), n = document.getElementById('effName'), d = document.getElementById('effDur');
-if(s.value) {
-n.value = s.value;
-d.value = (s.value.includes("Segen") || s.value.includes("Schutz") || s.value.includes("Hast")) ? 10 : 1;
+function handleDrop(e) {
+if (e.stopPropagation) e.stopPropagation();
+const targetIdx = parseInt(this.dataset.index);
+if (dragSrcIdx !== targetIdx) {
+const activeId = characters[activeIndex]?.id;
+const item = characters.splice(dragSrcIdx, 1)[0];
+characters.splice(targetIdx, 0, item);
+// Waiting Status aufheben, wenn manuell verschoben
+item.isWaiting = false;
+
+// Aktiven Charakter mitwandern lassen
+activeIndex = characters.findIndex(c => c.id === activeId);
+updateTables();
 }
+return false;
 }
+
+function handleDragEnd() { this.classList.remove('dragging'); }
 
 function updateTables() {
 save();
@@ -222,22 +206,30 @@ tChar.innerHTML = '';
 
 characters.forEach((c, i) => {
 const row = document.createElement('tr');
+row.draggable = true;
+row.dataset.index = i;
 if(i === activeIndex) row.className = 'active-turn';
 if(c.isReady) row.classList.add('is-ready');
 if(c.isWaiting) row.classList.add('is-waiting');
+
+row.addEventListener('dragstart', handleDragStart);
+row.addEventListener('dragover', handleDragOver);
+row.addEventListener('drop', handleDrop);
+row.addEventListener('dragend', handleDragEnd);
 
 const charEffs = effects.filter(e => e.ownerId === c.id);
 const effHtml = charEffs.map(e => `<span class="effect-tag">${e.name} (${e.duration})</span>`).join('');
 
 row.innerHTML = `
+<td class="drag-handle">☰</td>
 <td><input type="number" class="inline-init" value="${c.init}" onchange="updateIni(${i}, this.value)"></td>
-<td style="width:100%; padding-left: 8px;">
-<span class="${c.persistent ? 'is-persistent' : ''}">${c.persistent ? '🛡️ ' : ''}${c.name}</span>
-<div style="margin-top:2px;">${effHtml}</div>
+<td style="width:100%; padding-left: 5px;">
+<span class="${c.persistent ? 'is-persistent' : ''}">${c.name}</span>
+<div style="line-height:1;">${effHtml}</div>
 </td>
 <td class="controls">
 <button class="btn-tactic" onclick="delayTurn(${i})">Wait</button>
-<button class="btn-tactic" style="background:#fbbf24; color:black;" onclick="toggleReady(${i})">Ready</button>
+<button class="btn-tactic" style="background:var(--ready-color); color:black;" onclick="toggleReady(${i})">Ready</button>
 ${!c.persistent ? `<button class="btn-del" onclick="removeChar(${i})">✕</button>` : ''}
 </td>`;
 tChar.appendChild(row);
@@ -255,6 +247,27 @@ tEff.innerHTML += `<tr>
 });
 }
 
+function delayTurn(i) {
+const activeId = characters[activeIndex]?.id;
+const char = characters.splice(i, 1)[0];
+char.isWaiting = true;
+characters.push(char);
+activeIndex = characters.findIndex(c => c.id === activeId);
+updateTables();
+}
+
+function toggleReady(i) { characters[i].isReady = !characters[i].isReady; updateTables(); }
+function useSpell() {
+const s = document.getElementById('spellSelect'), n = document.getElementById('effName'), d = document.getElementById('effDur');
+if(s.value) { n.value = s.value; d.value = s.value.includes('(') ? 10 : 1; }
+}
+function addEffect() {
+const n = document.getElementById('effName'), d = document.getElementById('effDur');
+if(n.value && d.value && characters[activeIndex]) {
+effects.push({ name: n.value, duration: parseInt(d.value), ownerId: characters[activeIndex].id });
+n.value = ''; d.value = ''; updateTables();
+}
+}
 function updateIni(i, v) { characters[i].init = parseInt(v) || 0; characters.sort((a,b) => b.init - a.init); updateTables(); }
 function removeChar(i) { characters.splice(i, 1); updateTables(); }
 function removeEff(i) { effects.splice(i, 1); updateTables(); }
